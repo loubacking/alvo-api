@@ -41,7 +41,7 @@ function searchSong(req, res) {
 function searchArtist(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
-
+    console.log(name)
     global.db.collection("artist").find({ name }).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
@@ -51,6 +51,15 @@ function getArtist(req, res) {
     const { id } = req.params;
 
     global.db.collection("artist").findOne({ _id: new ObjectId(id) }).then((data) => {
+        log.info(data)
+        return res.json(data);
+    }).catch(e => log.error(e));
+}
+
+function getSong(req, res) {
+    const { id } = req.params;
+
+    global.db.collection("song").findOne({ _id: new ObjectId(id) }).then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
@@ -99,5 +108,6 @@ module.exports = {
     getArtist,
     getArtistSongs,
     authenticate,
-    isAuthenticated
+    isAuthenticated,
+    getSong
 };

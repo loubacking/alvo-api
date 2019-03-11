@@ -24,13 +24,14 @@ app.get('/artists', Routes.showArtists);
 app.get('/artists/:id', Routes.getArtist);
 app.get('/artists/:id/songs', Routes.getArtistSongs);
 app.get('/songs', Routes.showSongs);
+app.get('/songs/:id', Routes.getSong);
 app.post('/artists', Routes.isAuthenticated, Routes.createArtist);
 app.post('/songs', Routes.isAuthenticated, Routes.createSong);
 app.get('/searchSong', Routes.searchSong);
 app.get('/searchArtist', Routes.searchArtist);
 app.post('/auth', Routes.authenticate)
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3080;
 
 app.listen(port, () => {
   log.info(`App listening on port ${port}`);

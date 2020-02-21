@@ -17,14 +17,14 @@ function showSongs(req, res) {
 }
 
 function createArtist(req, res) {
-    global.db.collection("artist").insertOne({ ...req.body, createdAt: moment()}).then(() => {
+    global.db.collection("artist").insertOne({ ...req.body, createdAt: moment().format()}).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
 
 async function createSong(req, res) {
     const artistName = await global.db.collection("artist").findOne({ _id: new ObjectId(req.body.artistId) }).then(({ name }) => name);
-    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: moment() }).then(() => {
+    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: moment().format() }).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }

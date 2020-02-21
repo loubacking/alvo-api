@@ -1,9 +1,8 @@
-const Services = require('./services/service')
 const log = require('simple-node-logger').createSimpleLogger();
-const Promise = require('bluebird');
 var ObjectId = require('mongoose').Types.ObjectId;
 const utils = require('./utils/utils');
 const globals = require('./utils/globals');
+var moment = require('moment');
 
 function showArtists(req, res) {
     global.db.collection("artist").find({}).toArray().then((data) => {
@@ -18,13 +17,14 @@ function showSongs(req, res) {
 }
 
 function createArtist(req, res) {
-    global.db.collection("artist").insertOne(req.body).then(() => {
+    global.db.collection("artist").insertOne({ ...req.body, createdAt: moment()}).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
 
-function createSong(req, res) {
-    global.db.collection("song").insertOne(req.body).then(() => {
+async function createSong(req, res) {
+    const artistName = await global.db.collection("artist").findOne({ _id: new ObjectId(req.body.artistId) }).then(({ name }) => name);
+    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: moment() }).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
@@ -41,7 +41,6 @@ function searchSong(req, res) {
 function searchArtist(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
-    console.log(name)
     global.db.collection("artist").find({ name }).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));

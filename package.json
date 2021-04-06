@@ -1,17 +1,17 @@
 {
   "name": "alvo",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "moment": "^2.24.0",
-    "mongodb": "^3.1.10",
+    "mongodb": "^3.1.13",
     "mongoose": "^5.3.15",
     "simple-node-logger": "^0.93.40",
     "uuid": "^3.3.2"

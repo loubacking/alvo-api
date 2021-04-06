@@ -22,6 +22,15 @@ function createArtist(req, res) {
     }).catch(e => log.error(e));
 }
 
+async function editArtist(req, res) {
+    try {
+        await global.db.collection("artist").updateOne({ _id: ObjectId(req.body.filter) }, { $set: {...req.body.data, editedAt: moment().format() }});
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(400)
+    }
+}
+
 async function createSong(req, res) {
     const artistName = await global.db.collection("artist").findOne({ _id: new ObjectId(req.body.artistId) }).then(({ name }) => name);
     global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: moment().format() }).then(() => {
@@ -110,5 +119,6 @@ module.exports = {
     getArtistSongs,
     authenticate,
     isAuthenticated,
-    getSong
+    getSong,
+    editArtist
 };

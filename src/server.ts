@@ -10,6 +10,7 @@ var moment = require('moment');
 app.use(cors());
 
 const Routes = require('./routes');
+// process.env.MONGO_DB = 'mongodb+srv://admin:admin@cluster0.kpsw6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const uri = process.env.MONGO_DB;
 global.db = mongoose.createConnection(uri, { useNewUrlParser: true });
 

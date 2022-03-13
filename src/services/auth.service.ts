@@ -1,5 +1,5 @@
-const utils = require('../utils/utils');
-const globals = require('../utils/globals');
+const utils = require('../src/utils/utils');
+const globals = require('../src/utils/globals');
 
 
 class AuthService {

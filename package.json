@@ -2,7 +2,7 @@
   "name": "alvo",
   "version": "1.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "axios": "^0.21.1",
     "bluebird": "^3.5.3",
@@ -16,8 +16,11 @@
     "simple-node-logger": "^0.93.40",
     "uuid": "^3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  },
   "scripts": {
+    "start": "node src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

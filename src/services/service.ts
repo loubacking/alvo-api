@@ -1,11 +1,9 @@
-const Promise = require('bluebird');
-const axios = require('axios');
+import Promise from 'bluebird';
+import axios from 'axios';
 
-class Service {
+export class Service {
     constructor() {
 
     }
 
 }
-
-module.exports = Service;

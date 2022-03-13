@@ -1,3 +1,1 @@
-const authToken = {};
-
-module.exports = { authToken };
+export const authToken = {};

@@ -1,18 +1,14 @@
-const utils = require('../src/utils/utils');
-const globals = require('../src/utils/globals');
+import { authToken } from '../utils/globals';
+import { generateToken } from '../utils/utils';
 
-
-class AuthService {
+export class AuthService {
     authenticate({ username, password }, db) {
         console.log("<<<DB>>>", db);
         db.collection("user").find({ username }).toArray().then((response) => {
             console.log("Auth", response);
-            const token = utils.createToken();
-            globals.authToken[token] = username;
+            const token = generateToken();
+            authToken[token] = username;
             console.log("Auth Token", token);
         })
     }
-
 }
-
-module.exports = AuthService;

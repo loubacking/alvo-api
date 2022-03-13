@@ -1,16 +1,10 @@
-const uuidv4 = require('uuid/v4');
-const globals = require('./globals');
+import uuidv4 from "uuid/v4";
+import { authToken } from "./globals";
 
-function generateToken(){
-    return uuidv4();
+export function generateToken() {
+  return uuidv4();
 }
 
-function isAuthenticated(token) {
-    return globals.authToken[token] || false;
-  }
-
-module.exports = {
-    generateToken,
-    isAuthenticated
+export function isUserAuthenticated(token: string) {
+  return authToken[token] || false;
 }
-

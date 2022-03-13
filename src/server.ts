@@ -1,47 +1,57 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+import 'dotenv/config'
+import {connect} from 'mongoose';
+import * as express from 'express';
+import * as cors from 'cors';
+import * as bodyParser from 'body-parser';
+import { 
+  authenticate, 
+  createArtist, 
+  createSong, 
+  editArtist, 
+  getArtist, 
+  getArtistSongs, 
+  getSong, 
+  isAuthenticated, 
+  searchArtist, 
+  searchSong, 
+  showArtists, 
+  showSongs 
+} from './routes';
+  
 const log = require('simple-node-logger').createSimpleLogger();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const app = express();
-var moment = require('moment');
 
+const app = express();
 app.use(cors());
 
-const Routes = require('./routes');
-// process.env.MONGO_DB = 'mongodb+srv://admin:admin@cluster0.kpsw6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const uri = process.env.MONGO_DB;
-global.db = mongoose.createConnection(uri, { useNewUrlParser: true });
+global.db = connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('MongoDb connected'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
-    console.log('Time:', moment().format());
+    console.log('Time:', Date.now().toLocaleString());
     next();
   });
 
 app.get('/status', (req, res) => res.sendStatus(200));
 
-app.get('/artists', Routes.showArtists);
-app.get('/artists/:id', Routes.getArtist);
-app.get('/artists/:id/songs', Routes.getArtistSongs);
-app.get('/searchArtist', Routes.searchArtist);
+app.get('/artists', showArtists);
+app.get('/artists/:id', getArtist);
+app.get('/artists/:id/songs', getArtistSongs);
+app.get('/searchArtist', searchArtist);
 
-app.get('/songs', Routes.showSongs);
-app.get('/songs/:id', Routes.getSong);
-app.get('/searchSong', Routes.searchSong);
+app.get('/songs', showSongs);
+app.get('/songs/:id', getSong);
+app.get('/searchSong', searchSong);
 
-app.post('/artists', Routes.isAuthenticated, Routes.createArtist);
-app.post('/songs', Routes.isAuthenticated, Routes.createSong);
-app.post('/auth', Routes.authenticate)
+app.post('/artists', isAuthenticated, createArtist);
+app.post('/songs', isAuthenticated, createSong);
+app.post('/auth', authenticate)
 
-app.put('/artists', Routes.isAuthenticated, Routes.editArtist);
+app.put('/artists', isAuthenticated, editArtist);
 
 const port = process.env.PORT || 3080;
 
 app.listen(port, () => {
   log.info(`App listening on port ${port}`);
 });
-
-module.exports = { app };

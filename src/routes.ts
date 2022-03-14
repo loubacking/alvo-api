@@ -2,28 +2,30 @@ import { generateToken, isUserAuthenticated } from './utils/utils';
 import { authToken } from './utils/globals';
 const log = require('simple-node-logger').createSimpleLogger();
 import { Types } from 'mongoose';
+import { connection } from './server';
+
 
 export function showArtists(req, res) {
-    global.db.collection("artist").find({}).toArray().then((data) => {
+    connection.collection("artist").find({}).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
 export function showSongs(req, res) {
-    global.db.collection("song").find({}).toArray().then((data) => {
+    connection.collection("song").find({}).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
 export function createArtist(req, res) {
-    global.db.collection("artist").insertOne({ ...req.body, createdAt: Date.now().toLocaleString()}).then(() => {
+    connection.collection("artist").insertOne({ ...req.body, createdAt: Date.now().toLocaleString()}).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
 
 export async function editArtist(req, res) {
     try {
-        await global.db.collection("artist").updateOne({ _id: Types.ObjectId(req.body.filter) }, { $set: {...req.body.data, editedAt: Date.now().toLocaleString() }});
+        await connection.collection("artist").updateOne({ _id: new Types.ObjectId(req.body.filter) }, { $set: {...req.body.data, editedAt: Date.now().toLocaleString() }});
         res.sendStatus(200)
     } catch (e) {
         res.sendStatus(400)
@@ -31,8 +33,8 @@ export async function editArtist(req, res) {
 }
 
 export async function createSong(req, res) {
-    const artistName = await global.db.collection("artist").findOne({ _id: new Types.ObjectId(req.body.artistId) }).then(({ name }) => name);
-    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: Date.now().toLocaleString() }).then(() => {
+    const artistName = await connection.collection("artist").findOne({ _id: new Types.ObjectId(req.body.artistId) }).then(({ name }) => name);
+    connection.collection("song").insertOne({ ...req.body, artistName, createdAt: Date.now().toLocaleString() }).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
@@ -41,7 +43,7 @@ export function searchSong(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
 
-    global.db.collection("song").find({ name }).toArray().then((data) => {
+    connection.collection("song").find({ name }).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
@@ -49,7 +51,7 @@ export function searchSong(req, res) {
 export function searchArtist(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
-    global.db.collection("artist").find({ name }).toArray().then((data) => {
+    connection.collection("artist").find({ name }).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
@@ -57,7 +59,7 @@ export function searchArtist(req, res) {
 export function getArtist(req, res) {
     const { id } = req.params;
 
-    global.db.collection("artist").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
+    connection.collection("artist").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
@@ -66,7 +68,7 @@ export function getArtist(req, res) {
 export function getSong(req, res) {
     const { id } = req.params;
 
-    global.db.collection("song").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
+    connection.collection("song").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
@@ -75,7 +77,7 @@ export function getSong(req, res) {
 export function getArtistSongs(req, res) {
     const { id: artistId } = req.params;
 
-    global.db.collection("song").find({ artistId }).toArray().then((data) => {
+    connection.collection("song").find({ artistId }).toArray().then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
@@ -84,7 +86,7 @@ export function getArtistSongs(req, res) {
 export function authenticate(req, res) {
     const { username, password } = req.body;
 
-    global.db.collection("user").find({ username }).toArray().then((response) => {
+    connection.collection("user").find({ username }).toArray().then((response) => {
         if (response[0] && response[0].password === password) {
             const token = generateToken();
             authToken[token] = username;

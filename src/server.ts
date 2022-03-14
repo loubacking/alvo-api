@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import {connect} from 'mongoose';
+import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -23,8 +23,9 @@ const log = require('simple-node-logger').createSimpleLogger();
 const app = express();
 app.use(cors());
 
-const uri = process.env.MONGO_DB;
-global.db = connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('MongoDb connected'));
+export const uri = process.env.MONGO_DB;
+mongoose.connect(uri).then(() => console.log('MongoDb connected'));
+export const connection = mongoose.connection;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

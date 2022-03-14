@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-      "outDir": "/dist",
-      "module": "commonjs",
-      "target": "es2019",
-      "esModuleInterop": false,
-      "allowSyntheticDefaultImports": true,
-      // "allowJs": true,
-      "forceConsistentCasingInFileNames": true
+    "target": "es2019",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
   }
 }

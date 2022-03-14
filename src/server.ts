@@ -1,8 +1,8 @@
 import 'dotenv/config'
 import {connect} from 'mongoose';
-import * as express from 'express';
-import * as cors from 'cors';
-import * as bodyParser from 'body-parser';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import { 
   authenticate, 
   createArtist, 

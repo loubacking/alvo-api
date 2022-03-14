@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+      "outDir": "/dist",
+      "module": "commonjs",
+      "target": "es2019",
+      "esModuleInterop": false,
+      "allowSyntheticDefaultImports": true,
+      // "allowJs": true,
+      "forceConsistentCasingInFileNames": true
+  }
+}

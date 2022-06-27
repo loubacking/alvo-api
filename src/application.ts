@@ -15,10 +15,3 @@ export async function editArtist(req, res) {
         res.sendStatus(400)
     }
 }
-
-export async function createSong(req, res) {
-    const artistName = await global.db.collection("artist").findOne({ _id: new Types.ObjectId(req.body.artistId) }).then(({ name }) => name);
-    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: Date.now().toLocaleString() }).then(() => {
-        return res.sendStatus(200);
-    }).catch(e => log.error(e));
-}

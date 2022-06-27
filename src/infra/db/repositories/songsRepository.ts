@@ -10,7 +10,22 @@ export type Song = {
   chords: string
 }
 
+export type CreateSongRequest = {
+  artistId: string, 
+  artistName: string, 
+  name: string, 
+  lyrics: string, 
+  chords: string
+}
+
 export class SongsRepository {
+  create = async (req: CreateSongRequest): Promise<string> => {
+    let songsCollection = await MongoHelper.getCollection('song');
+    var response = await songsCollection.insertOne({ ...req, createdAt: Date.now().toLocaleString() });
+
+    return response.insertedId;
+  }
+
   getAll = async (): Promise<Song[]> => {
     let songsCollection = await MongoHelper.getCollection('song');
 

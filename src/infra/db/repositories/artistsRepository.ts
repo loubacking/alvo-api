@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { MongoHelper } from "../mongoHelper"
 
 export type Artist = {
+  _id: string,
   createdAt: string,
   name: string,
   image: string
@@ -16,7 +17,7 @@ export class ArtistsRepository {
       .toArray();
   }
 
-  getById = async (id: string): Promise<Artist[] | {}> => {
+  getById = async (id: string): Promise<Artist | null> => {
     try {
       let artistsCollection = await MongoHelper.getCollection('artist');
       
@@ -25,7 +26,7 @@ export class ArtistsRepository {
       
     } catch (error) {
       console.error(error);
-      return {};
+      return null;
     }
   }
 

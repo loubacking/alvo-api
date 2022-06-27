@@ -9,7 +9,7 @@ export type User = {
 export class UserRepository {
   getByUsername = async (username: string): Promise<User | null> => {
     try {
-      let usersCollection = await MongoHelper.getCollection('user');
+      let usersCollection = await MongoHelper.getCollection('users');
       
       return usersCollection
       .findOne({ username });

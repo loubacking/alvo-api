@@ -7,6 +7,6 @@ const controller = new AuthController(repository);
 
 export const configAuthRoutes = (router: Router) => {
   router.get('/auth', controller.login);
-  router.get('/login', controller.login);
+  router.post('/login', controller.login);
 
 }

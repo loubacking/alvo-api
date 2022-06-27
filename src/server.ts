@@ -6,12 +6,12 @@ import {
   createArtist, 
   createSong, 
   editArtist, 
-  isAuthenticated, 
 } from './application';
 import { MongoHelper } from './infra/db/mongoHelper';
 import { configSongsRoutes } from './presentation/routes/songsRoutes';
 import { configArtistsRoutes } from './presentation/routes/artistsRoutes';
 import { configAuthRoutes } from './presentation/routes/authRoutes';
+import { isAuthenticated } from './presentation/middlewares/authMiddleware';
   
 const app = express();
 app.use(cors());

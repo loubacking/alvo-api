@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import { connect } from 'mongoose';
 import express, { Router } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
@@ -13,9 +12,7 @@ import {
   getSong, 
   isAuthenticated, 
   searchArtist, 
-  searchSong, 
   showArtists, 
-  showSongs 
 } from './application';
 import { MongoHelper } from './infra/db/mongoHelper';
 import { route } from './presentation/routes/songsRoutes';
@@ -40,7 +37,6 @@ app.get('/searchArtist', searchArtist);
 const router = Router();
 route(router)
 app.get('/songs/:id', getSong);
-app.get('/searchSong', searchSong);
 
 app.post('/artists', isAuthenticated, createArtist);
 app.post('/songs', isAuthenticated, createSong);

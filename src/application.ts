@@ -2,19 +2,11 @@ import { generateToken, isUserAuthenticated } from './utils/utils';
 import { authToken } from './utils/globals';
 const log = require('simple-node-logger').createSimpleLogger();
 import { Types } from 'mongoose';
-import { SongsRepository } from './infra/db/repositories/songsRepository';
 
 export function showArtists(req, res) {
     global.db.collection("artist").find({}).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
-}
-
-export async function showSongs(req, res) {
-    let repo = new SongsRepository();
-    let songs = await repo.getAll();
-
-    return res.json(songs);
 }
 
 export function createArtist(req, res) {
@@ -36,15 +28,6 @@ export async function createSong(req, res) {
     const artistName = await global.db.collection("artist").findOne({ _id: new Types.ObjectId(req.body.artistId) }).then(({ name }) => name);
     global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: Date.now().toLocaleString() }).then(() => {
         return res.sendStatus(200);
-    }).catch(e => log.error(e));
-}
-
-export function searchSong(req, res) {
-    const { keyword } = req.query;
-    const name = new RegExp(keyword, "i");
-
-    global.db.collection("song").find({ name }).toArray().then((data) => {
-        return res.json(data);
     }).catch(e => log.error(e));
 }
 

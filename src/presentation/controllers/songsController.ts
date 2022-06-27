@@ -9,8 +9,16 @@ export class SongsController {
   }
 
   getSongs = async (req: Request, res: Response) => {
-    let songs = await this.songsRepository.getAll();
+    const songs = await this.songsRepository.getAll();
 
     return res.json(songs);
   };
+
+  searchSong = async (req: Request, res: Response) => {
+    const { keyword } = req.query;
+    const name = new RegExp(keyword as string, "i");
+
+    const songs = await this.songsRepository.search(name);
+    return res.json(songs);
+}
 }

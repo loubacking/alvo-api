@@ -18,7 +18,7 @@ export class SongsRepository {
       .toArray();
   }
 
-  search = async (name: string): Promise<Song[]> => {
+  search = async (name: RegExp): Promise<Song[]> => {
     let songsCollection = await MongoHelper.getCollection('song');
 
     return songsCollection

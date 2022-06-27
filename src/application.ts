@@ -2,6 +2,7 @@ import { generateToken, isUserAuthenticated } from './utils/utils';
 import { authToken } from './utils/globals';
 const log = require('simple-node-logger').createSimpleLogger();
 import { Types } from 'mongoose';
+import { SongsRepository } from './infra/db/repositories/songsRepository';
 
 export function showArtists(req, res) {
     global.db.collection("artist").find({}).toArray().then((data) => {
@@ -9,10 +10,11 @@ export function showArtists(req, res) {
     }).catch(e => log.error(e));
 }
 
-export function showSongs(req, res) {
-    global.db.collection("song").find({}).toArray().then((data) => {
-        return res.json(data);
-    }).catch(e => log.error(e));
+export async function showSongs(req, res) {
+    let repo = new SongsRepository();
+    let songs = await repo.getAll();
+
+    return res.json(songs);
 }
 
 export function createArtist(req, res) {

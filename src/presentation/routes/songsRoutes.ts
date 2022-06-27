@@ -8,5 +8,6 @@ let controller = new SongsController(repository);
 export const route = (router: Router) => {
   router.get('/songs', controller.getSongs);
   router.get('/searchSong', controller.searchSong);
+  router.get('/songs/:id', controller.getSongById);
 
 }

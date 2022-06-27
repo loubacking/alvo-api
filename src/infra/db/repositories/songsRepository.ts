@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { MongoHelper } from "../mongoHelper"
 
 export type Song = {
@@ -16,6 +17,19 @@ export class SongsRepository {
     return songsCollection
       .find({})
       .toArray();
+  }
+
+  getById = async (id: string): Promise<Song[] | {}> => {
+    try {
+      let songsCollection = await MongoHelper.getCollection('song');
+      
+      return songsCollection
+        .findOne({ _id: new Types.ObjectId(id) });
+      
+    } catch (error) {
+      console.error(error);
+      return {};
+    }
   }
 
   search = async (name: RegExp): Promise<Song[]> => {

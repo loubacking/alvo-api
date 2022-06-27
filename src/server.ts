@@ -9,7 +9,6 @@ import {
   editArtist, 
   getArtist, 
   getArtistSongs, 
-  getSong, 
   isAuthenticated, 
   searchArtist, 
   showArtists, 
@@ -36,7 +35,6 @@ app.get('/searchArtist', searchArtist);
 
 const router = Router();
 route(router)
-app.get('/songs/:id', getSong);
 
 app.post('/artists', isAuthenticated, createArtist);
 app.post('/songs', isAuthenticated, createSong);

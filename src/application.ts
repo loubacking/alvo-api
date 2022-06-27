@@ -48,15 +48,6 @@ export function getArtist(req, res) {
     }).catch(e => log.error(e));
 }
 
-export function getSong(req, res) {
-    const { id } = req.params;
-
-    global.db.collection("song").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
-        log.info(data)
-        return res.json(data);
-    }).catch(e => log.error(e));
-}
-
 export function getArtistSongs(req, res) {
     const { id: artistId } = req.params;
 

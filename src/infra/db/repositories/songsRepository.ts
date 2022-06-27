@@ -39,4 +39,18 @@ export class SongsRepository {
       .find({ name })
       .toArray();
   }
+
+  
+  getByArtistId = async (artistId: string): Promise<Song[] | {}> => {
+    try {
+      let songsCollection = await MongoHelper.getCollection('song');
+      
+      return songsCollection
+        .find({ artistId })
+        .toArray();
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
 }

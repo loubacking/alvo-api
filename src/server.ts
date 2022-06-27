@@ -7,14 +7,11 @@ import {
   createArtist, 
   createSong, 
   editArtist, 
-  getArtist, 
-  getArtistSongs, 
   isAuthenticated, 
-  searchArtist, 
-  showArtists, 
 } from './application';
 import { MongoHelper } from './infra/db/mongoHelper';
-import { route } from './presentation/routes/songsRoutes';
+import { configSongsRoutes } from './presentation/routes/songsRoutes';
+import { configArtistsRoutes } from './presentation/routes/artistsRoutes';
   
 const app = express();
 app.use(cors());
@@ -28,20 +25,15 @@ app.use(function (req, res, next) {
   
 app.get('/status', (req, res) => res.sendStatus(200));
 
-app.get('/artists', showArtists);
-app.get('/artists/:id', getArtist);
-app.get('/artists/:id/songs', getArtistSongs);
-app.get('/searchArtist', searchArtist);
-
-const router = Router();
-route(router)
-
 app.post('/artists', isAuthenticated, createArtist);
 app.post('/songs', isAuthenticated, createSong);
 app.post('/auth', authenticate)
 
 app.put('/artists', isAuthenticated, editArtist);
 
+const router = Router();
+configSongsRoutes(router);
+configArtistsRoutes(router);
 
 app.use(router);
 

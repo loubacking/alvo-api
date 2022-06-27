@@ -5,7 +5,7 @@ import { SongsController } from "../controllers/songsController";
 let repository = new SongsRepository();
 let controller = new SongsController(repository);
 
-export const route = (router: Router) => {
+export const configSongsRoutes = (router: Router) => {
   router.get('/songs', controller.getSongs);
   router.get('/searchSong', controller.searchSong);
   router.get('/songs/:id', controller.getSongById);

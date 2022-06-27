@@ -3,7 +3,6 @@ import express, { Router } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import { 
-  authenticate, 
   createArtist, 
   createSong, 
   editArtist, 
@@ -12,6 +11,7 @@ import {
 import { MongoHelper } from './infra/db/mongoHelper';
 import { configSongsRoutes } from './presentation/routes/songsRoutes';
 import { configArtistsRoutes } from './presentation/routes/artistsRoutes';
+import { configAuthRoutes } from './presentation/routes/authRoutes';
   
 const app = express();
 app.use(cors());
@@ -27,13 +27,13 @@ app.get('/status', (req, res) => res.sendStatus(200));
 
 app.post('/artists', isAuthenticated, createArtist);
 app.post('/songs', isAuthenticated, createSong);
-app.post('/auth', authenticate)
 
 app.put('/artists', isAuthenticated, editArtist);
 
 const router = Router();
 configSongsRoutes(router);
 configArtistsRoutes(router);
+configAuthRoutes(router);
 
 app.use(router);
 

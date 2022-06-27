@@ -3,7 +3,7 @@
       "outDir": "/dist",
       "module": "commonjs",
       "target": "es2019",
-      "esModuleInterop": false,
+      "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
       // "allowJs": true,
       "forceConsistentCasingInFileNames": true

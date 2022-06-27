@@ -1,7 +1,7 @@
 import 'dotenv/config'
-import {connect} from 'mongoose';
-import * as express from 'express';
-import * as cors from 'cors';
+import { connect } from 'mongoose';
+import express from 'express';
+import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import { 
   authenticate, 
@@ -18,8 +18,6 @@ import {
   showSongs 
 } from './routes';
   
-const log = require('simple-node-logger').createSimpleLogger();
-
 const app = express();
 app.use(cors());
 
@@ -53,5 +51,5 @@ app.put('/artists', isAuthenticated, editArtist);
 const port = process.env.PORT || 3080;
 
 app.listen(port, () => {
-  log.info(`App listening on port ${port}`);
+  console.info(`App listening on port ${port}`);
 });

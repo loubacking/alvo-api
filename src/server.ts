@@ -1,22 +1,15 @@
 import 'dotenv/config'
 import express, { Router } from 'express';
-import cors from 'cors';
-import * as bodyParser from 'body-parser';
 import { MongoHelper } from './infra/db/mongoHelper';
 import { configSongsRoutes } from './presentation/routes/songsRoutes';
 import { configArtistsRoutes } from './presentation/routes/artistsRoutes';
 import { configAuthRoutes } from './presentation/routes/authRoutes';
+import { setupMiddlewares } from './presentation/middlewares';
   
 const app = express();
-app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(function (req, res, next) {
-  console.log('Time:', Date.now().toLocaleString());
-    next();
-  });
-  
+setupMiddlewares(app);
+
 app.get('/status', (req, res) => res.sendStatus(200));
 
 const router = Router();

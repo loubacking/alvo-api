@@ -16,4 +16,6 @@ export const configArtistsRoutes = (router: Router) => {
 
   router.post('/artists', isAuthenticated, controller.createArtist);
 
+  router.put('/artists', isAuthenticated, controller.editArtist);
+
 }

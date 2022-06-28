@@ -2,14 +2,10 @@ import 'dotenv/config'
 import express, { Router } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
-import { 
-  editArtist, 
-} from './application';
 import { MongoHelper } from './infra/db/mongoHelper';
 import { configSongsRoutes } from './presentation/routes/songsRoutes';
 import { configArtistsRoutes } from './presentation/routes/artistsRoutes';
 import { configAuthRoutes } from './presentation/routes/authRoutes';
-import { isAuthenticated } from './presentation/middlewares/authMiddleware';
   
 const app = express();
 app.use(cors());
@@ -22,8 +18,6 @@ app.use(function (req, res, next) {
   });
   
 app.get('/status', (req, res) => res.sendStatus(200));
-
-app.put('/artists', isAuthenticated, editArtist);
 
 const router = Router();
 configSongsRoutes(router);

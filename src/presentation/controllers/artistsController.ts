@@ -45,4 +45,11 @@ export class ArtistsController {
 
     return res.json({ id: artistId });
   }
+
+  editArtist = async (req: Request, res: Response) => {
+    const { id, ...params } = req.body;
+    const artistId = await this.artistsRepository.update(id, params);
+
+    return res.json({ id: artistId });
+  }
 }

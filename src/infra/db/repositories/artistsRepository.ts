@@ -1,3 +1,4 @@
+import { response } from "express";
 import { Types } from "mongoose";
 import { MongoHelper } from "../mongoHelper"
 
@@ -9,8 +10,22 @@ export type Artist = {
 }
 
 export class ArtistsRepository {
+  update = async (id: string, params: any): Promise<string | null> => {
+    try {
+      const artistsCollection = await MongoHelper.getCollection('artist');
+      const response = await artistsCollection.updateOne(
+        { _id: Types.ObjectId(id) }, 
+        { $set: {...params, editedAt: Date.now().toLocaleString() }});
+      
+      return response.upsertedId.toString();
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
   create = async (name: string, imageUrl: string): Promise<string> => {
-    let artistsCollection = await MongoHelper.getCollection('artist');
+    const artistsCollection = await MongoHelper.getCollection('artist');
     const artist = await artistsCollection.insertOne({ name, imageUrl, createdAt: Date.now().toLocaleString()});
 
     return artist.insertedId;

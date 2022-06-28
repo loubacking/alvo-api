@@ -1,44 +1,43 @@
+import { generateToken, isUserAuthenticated } from './utils/utils';
+import { authToken } from './utils/globals';
 const log = require('simple-node-logger').createSimpleLogger();
-var ObjectId = require('mongoose').Types.ObjectId;
-const utils = require('./utils/utils');
-const globals = require('./utils/globals');
-var moment = require('moment');
+import { Types } from 'mongoose';
 
-function showArtists(req, res) {
+export function showArtists(req, res) {
     global.db.collection("artist").find({}).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
-function showSongs(req, res) {
+export function showSongs(req, res) {
     global.db.collection("song").find({}).toArray().then((data) => {
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
-function createArtist(req, res) {
-    global.db.collection("artist").insertOne({ ...req.body, createdAt: moment().format()}).then(() => {
+export function createArtist(req, res) {
+    global.db.collection("artist").insertOne({ ...req.body, createdAt: Date.now().toLocaleString()}).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
 
-async function editArtist(req, res) {
+export async function editArtist(req, res) {
     try {
-        await global.db.collection("artist").updateOne({ _id: ObjectId(req.body.filter) }, { $set: {...req.body.data, editedAt: moment().format() }});
+        await global.db.collection("artist").updateOne({ _id: Types.ObjectId(req.body.filter) }, { $set: {...req.body.data, editedAt: Date.now().toLocaleString() }});
         res.sendStatus(200)
     } catch (e) {
         res.sendStatus(400)
     }
 }
 
-async function createSong(req, res) {
-    const artistName = await global.db.collection("artist").findOne({ _id: new ObjectId(req.body.artistId) }).then(({ name }) => name);
-    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: moment().format() }).then(() => {
+export async function createSong(req, res) {
+    const artistName = await global.db.collection("artist").findOne({ _id: new Types.ObjectId(req.body.artistId) }).then(({ name }) => name);
+    global.db.collection("song").insertOne({ ...req.body, artistName, createdAt: Date.now().toLocaleString() }).then(() => {
         return res.sendStatus(200);
     }).catch(e => log.error(e));
 }
 
-function searchSong(req, res) {
+export function searchSong(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
 
@@ -47,7 +46,7 @@ function searchSong(req, res) {
     }).catch(e => log.error(e));
 }
 
-function searchArtist(req, res) {
+export function searchArtist(req, res) {
     const { keyword } = req.query;
     const name = new RegExp(keyword, "i");
     global.db.collection("artist").find({ name }).toArray().then((data) => {
@@ -55,25 +54,25 @@ function searchArtist(req, res) {
     }).catch(e => log.error(e));
 }
 
-function getArtist(req, res) {
+export function getArtist(req, res) {
     const { id } = req.params;
 
-    global.db.collection("artist").findOne({ _id: new ObjectId(id) }).then((data) => {
+    global.db.collection("artist").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
-function getSong(req, res) {
+export function getSong(req, res) {
     const { id } = req.params;
 
-    global.db.collection("song").findOne({ _id: new ObjectId(id) }).then((data) => {
+    global.db.collection("song").findOne({ _id: new Types.ObjectId(id) }).then((data) => {
         log.info(data)
         return res.json(data);
     }).catch(e => log.error(e));
 }
 
-function getArtistSongs(req, res) {
+export function getArtistSongs(req, res) {
     const { id: artistId } = req.params;
 
     global.db.collection("song").find({ artistId }).toArray().then((data) => {
@@ -82,13 +81,13 @@ function getArtistSongs(req, res) {
     }).catch(e => log.error(e));
 }
 
-function authenticate(req, res) {
+export function authenticate(req, res) {
     const { username, password } = req.body;
 
     global.db.collection("user").find({ username }).toArray().then((response) => {
         if (response[0] && response[0].password === password) {
-            const token = utils.generateToken();
-            globals.authToken[token] = username;
+            const token = generateToken();
+            authToken[token] = username;
             console.log("Auth Token", token);
             return res.status(200).send({token});
         } else {
@@ -98,27 +97,12 @@ function authenticate(req, res) {
     }).catch(e => console.log(e));
 }
 
-function isAuthenticated(req, res, next){
+export function isAuthenticated(req, res, next){
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
-    req.username = utils.isAuthenticated(token);
+    req.username = isUserAuthenticated(token);
     if(req.username)
       return next();
     if(req.headers['temporary-access'] === 'alvo2020')
         return next();
     res.status(400).send({ error: 'User not authenticated' });
 }
-
-module.exports = {
-    showArtists,
-    showSongs,
-    createArtist,
-    createSong,
-    searchArtist,
-    searchSong,
-    getArtist,
-    getArtistSongs,
-    authenticate,
-    isAuthenticated,
-    getSong,
-    editArtist
-};

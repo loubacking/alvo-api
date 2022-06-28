@@ -9,6 +9,13 @@ export type Artist = {
 }
 
 export class ArtistsRepository {
+  create = async (name: string, imageUrl: string): Promise<string> => {
+    let artistsCollection = await MongoHelper.getCollection('artist');
+    const artist = await artistsCollection.insertOne({ name, imageUrl, createdAt: Date.now().toLocaleString()});
+
+    return artist.insertedId;
+  }
+
   getAll = async (): Promise<Artist[]> => {
     let artistsCollection = await MongoHelper.getCollection('artist');
 

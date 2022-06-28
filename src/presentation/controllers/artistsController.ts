@@ -38,4 +38,11 @@ export class ArtistsController {
 
     return res.json(songs);
   }
+
+  createArtist = async (req: Request, res: Response) => {
+    const { name, imageUrl } = req.body;
+    const artistId = await this.artistsRepository.create(name, imageUrl);
+
+    return res.json({ id: artistId });
+  }
 }

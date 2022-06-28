@@ -3,7 +3,6 @@ import express, { Router } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import { 
-  createArtist, 
   editArtist, 
 } from './application';
 import { MongoHelper } from './infra/db/mongoHelper';
@@ -23,9 +22,6 @@ app.use(function (req, res, next) {
   });
   
 app.get('/status', (req, res) => res.sendStatus(200));
-
-app.post('/artists', isAuthenticated, createArtist);
-
 
 app.put('/artists', isAuthenticated, editArtist);
 

@@ -1,6 +1,7 @@
 import { MongoHelper } from "../mongoHelper";
 
 export type User = {
+  _id?: string,
   username: string,
   encryptedPassword: string,
   email: string | null

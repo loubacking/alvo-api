@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../../infra/db/repositories/userRepository";
 import { EncryptHelper } from "../../infra/encrypt/encryptHelper";
-import { authToken } from "../../utils/globals";
-import { generateToken } from "../../utils/utils";
 import { TokenHelper } from "../helpers/tokenHelper";
 
 export class AuthController {
@@ -20,15 +18,18 @@ export class AuthController {
     const { email, password } = req.body;
 
     const user = await this.userRepository.getByEmail(email);
-    if (this.encryptHelper.validate(user?.encryptedPassword, password)) {
-        const token = generateToken();
-        authToken[token] = email;
-        console.log("Auth Token", token);
-        return res.status(200).send({token});
-    } else {
-        console.log("Incorrect Username or Password");
-        return res.sendStatus(400);
+    console.log(user);
+    if (user === null) {
+      return res.status(400).json({ error: "User doesn't exist" })
     }
+
+    if (!this.encryptHelper.validate(user?.encryptedPassword, password)){
+      return res.status(400).json({ error: "Wrong password" })
+    } 
+
+    const authToken = this.tokenHelper.create(user._id, user.email)
+    await this.userRepository.updateToken({id: user._id, authToken});
+    return res.status(200).send({ authToken });
   }
 
   register = async (req: Request, res: Response) => {

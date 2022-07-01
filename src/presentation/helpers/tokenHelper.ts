@@ -9,9 +9,9 @@ export class TokenHelper {
     this.expiresIn = expiresIn;
   }
 
-  create = (userId: string, email: string): string => {
+  create = (fullName: string, email: string): string => {
     return jwt.sign(
-      { userId: userId, email },
+      { fullName, email },
       this.tokenKey,
       {
         expiresIn: this.expiresIn,

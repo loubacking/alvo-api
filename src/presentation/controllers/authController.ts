@@ -17,25 +17,24 @@ export class AuthController {
   login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await this.userRepository.getByEmail(email);
-    console.log(user);
+    const user = await this.userRepository.getByEmailAsync(email);
     if (user === null) {
       return res.status(400).json({ error: "User doesn't exist" })
     }
 
-    if (!this.encryptHelper.validate(user?.encryptedPassword, password)){
+    if (!(await this.encryptHelper.validateAsync(password, user?.encryptedPassword))){
       return res.status(400).json({ error: "Wrong password" })
     } 
 
-    const authToken = this.tokenHelper.create(user._id, user.email)
-    await this.userRepository.updateToken({id: user._id, authToken});
+    const authToken = this.tokenHelper.create(user.fullName, user.email)
+    await this.userRepository.updateTokenAsync({id: user._id, authToken});
     return res.status(200).send({ authToken });
   }
 
   register = async (req: Request, res: Response) => {
     const { email, fullName, password, passwordConfirmation } = req.body;
 
-    const oldUser = await this.userRepository.getByEmail(email.toLowerCase());
+    const oldUser = await this.userRepository.getByEmailAsync(email.toLowerCase());
 
     if (oldUser !== null) {
       return res.status(400).json({ error: "User already exists with this email" });
@@ -45,11 +44,16 @@ export class AuthController {
       return res.status(400).json({ error: "Password doesn't match password confirmation" });
     }
 
-    const encryptedPass = await this.encryptHelper.encrypt(password);
-    const userId = await this.userRepository.create({email, fullName, encryptedPassword: encryptedPass})
-    const authToken = this.tokenHelper.create(userId, email);
-    const { encryptedPassword, ...user} = await this.userRepository.updateToken({ id: userId, authToken });
+    const encryptedPassword = await this.encryptHelper.encryptAsync(password);
+    const authToken = this.tokenHelper.create(fullName, email);
+    const user = {
+      email, 
+      fullName, 
+      encryptedPassword, 
+      authToken
+    };
+    const userId = await this.userRepository.createAsync(user);
 
-    return res.status(201).json(user);
+    return res.status(201).json({ ...user, _id: userId });
   }
 }

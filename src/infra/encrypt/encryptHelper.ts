@@ -7,11 +7,12 @@ export class EncryptHelper {
     this.salt = salt;
   }
   
-  encrypt = async ( text: string ): Promise<string> => {
+  encryptAsync = async ( text: string ): Promise<string> => {
     return await bcrypt.hash(text, parseInt(this.salt))
   }
   
-  validate = async (encryptedText: string, text: any): Promise<boolean> => {
-    return await bcrypt.compare(text, encryptedText);
+  validateAsync = async (text: any, encryptedText: string): Promise<boolean> => {
+    const result = await bcrypt.compare(text, encryptedText);
+    return result;
   }
 }

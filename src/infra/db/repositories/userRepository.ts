@@ -2,13 +2,14 @@ import { MongoHelper } from "../mongoHelper";
 
 export type User = {
   _id?: string,
+  fullName: string,
   username: string,
   encryptedPassword: string,
   email: string | null
 }
 
 export class UserRepository {
-  getByEmail = async (email: string): Promise<User | null> => {
+  getByEmailAsync = async (email: string): Promise<User | null> => {
     try {
       let usersCollection = await MongoHelper.getCollection('users');
       
@@ -20,12 +21,12 @@ export class UserRepository {
     }
   };
   
-  create = async ({ email, encryptedPassword, fullName }): Promise<string | null> => {
+  createAsync = async ({ email, encryptedPassword, fullName, authToken }): Promise<string | null> => {
     try {
       let usersCollection = await MongoHelper.getCollection('users');
       
       const user = await usersCollection
-        .insertOne({ email, encryptedPassword, fullName });
+        .insertOne({ email, encryptedPassword, fullName, authToken });
 
       return user.insertedId
     } catch (error) {
@@ -34,7 +35,7 @@ export class UserRepository {
     }
   };
 
-  updateToken = async ({ id, authToken }): Promise<User | null> => {
+  updateTokenAsync = async ({ id, authToken }): Promise<User | null> => {
     try {
       let usersCollection = await MongoHelper.getCollection('users');
       

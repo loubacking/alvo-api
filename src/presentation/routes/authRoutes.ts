@@ -1,12 +1,17 @@
 import { Router } from "express";
 import { UserRepository } from "../../infra/db/repositories/userRepository";
+import { EncryptHelper } from "../../infra/encrypt/encryptHelper";
 import { AuthController } from "../controllers/authController";
+import { TokenHelper } from "../helpers/tokenHelper";
+import { validateLoginRequestAsync, validateRegisterRequestAsync } from "../middlewares/validators/authValidators";
 
 const repository = new UserRepository();
-const controller = new AuthController(repository);
+const encryptHelper = new EncryptHelper(process.env.SALT);
+const tokenHelper = new TokenHelper(process.env.TOKEN_KEY, process.env.TOKEN_EXPIRES_IN);
+const controller = new AuthController(repository, encryptHelper, tokenHelper);
 
 export const configAuthRoutes = (router: Router) => {
-  router.get('/auth', controller.login);
-  router.post('/login', controller.login);
+  router.post('/register', validateRegisterRequestAsync, controller.register);
+  router.post('/login', validateLoginRequestAsync, controller.login);
 
 }

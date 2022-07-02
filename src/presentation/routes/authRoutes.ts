@@ -3,7 +3,7 @@ import { UserRepository } from "../../infra/db/repositories/userRepository";
 import { EncryptHelper } from "../../infra/encrypt/encryptHelper";
 import { AuthController } from "../controllers/authController";
 import { TokenHelper } from "../helpers/tokenHelper";
-import { validateRegisterRequestAsync } from "../middlewares/validators/authValidators";
+import { validateLoginRequestAsync, validateRegisterRequestAsync } from "../middlewares/validators/authValidators";
 
 const repository = new UserRepository();
 const encryptHelper = new EncryptHelper(process.env.SALT);
@@ -12,6 +12,6 @@ const controller = new AuthController(repository, encryptHelper, tokenHelper);
 
 export const configAuthRoutes = (router: Router) => {
   router.post('/register', validateRegisterRequestAsync, controller.register);
-  router.post('/login', controller.login);
+  router.post('/login', validateLoginRequestAsync, controller.login);
 
 }

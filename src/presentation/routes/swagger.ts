@@ -2,7 +2,6 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const outputFile = './src/presentation/config/swagger_output.json'
 const endpointsFiles = [
-  './src/presentation/routes/index.ts',
   './src/presentation/routes/authRoutes.ts',
   './src/presentation/routes/songsRoutes.ts',
   './src/presentation/routes/artistsRoutes.ts',

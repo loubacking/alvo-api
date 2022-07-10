@@ -18,14 +18,6 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/status": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/register": {
       "post": {
         "tags": [
@@ -102,35 +94,79 @@
     },
     "/songs": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Songs"
+        ],
+        "description": "Get a list of songs",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Songs"
+        ],
+        "description": "Create new song",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "artistId": {
+                  "type": "string",
+                  "example": "artistId"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Ednaldo Pereira"
+                },
+                "$lyrics": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "$chords": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "required": [
+                "artistId",
+                "name"
+              ]
+            }
+          }
+        ],
         "responses": {}
       }
     },
     "/searchSong": {
       "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Songs"
+        ],
+        "description": "Search songs that matches keyword",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": "true"
+          }
+        ],
         "responses": {}
       }
     },
     "/songs/{id}": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Songs"
+        ],
+        "description": "Search songs that matches keyword",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true
+            "in": "query",
+            "required": "true"
           }
         ],
         "responses": {}

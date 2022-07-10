@@ -41,7 +41,7 @@
     "watch-node": "nodemon src/server.ts",
     "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m Heroku && git push heroku master",
-    "swagger-autogen": "node src/presentation/routes/swagger.ts"
+    "update-swagger": "node src/presentation/routes/swagger.ts"
   },
   "keywords": [],
   "author": "",

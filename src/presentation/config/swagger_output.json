@@ -138,33 +138,88 @@
     },
     "/artists": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get a list of artists",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Artists"
+        ],
+        "description": "Create new artist",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Ednaldo Pereira"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "image_link"
+                }
+              },
+              "required": [
+                "name",
+                "imageUrl"
+              ]
+            }
+          }
+        ],
         "responses": {}
       },
       "put": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Artists"
+        ],
+        "description": "Edit artist data",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "artistId"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Ednaldo Pereira"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "image_link"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
         "responses": {}
       }
     },
     "/artists/{id}": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get artist with id provided",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true
+            "in": "query",
+            "required": "true"
           }
         ],
         "responses": {}
@@ -172,13 +227,15 @@
     },
     "/artists/{id}/songs": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get songs from the provided artist",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true
+            "in": "query",
+            "required": "true"
           }
         ],
         "responses": {}
@@ -186,9 +243,17 @@
     },
     "/searchArtist": {
       "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
+        "tags": [
+          "Artists"
+        ],
+        "description": "Search artists that matches keyword",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": "true"
+          }
+        ],
         "responses": {}
       }
     }

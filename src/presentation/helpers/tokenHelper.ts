@@ -18,4 +18,13 @@ export class TokenHelper {
       }
     );
   }
+
+  verify = (token: string): boolean => {
+    try {
+      const response = jwt.verify(token, this.tokenKey);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

@@ -25,7 +25,14 @@ const doc = {
     },
     // { ... }
   ],
-  securityDefinitions: {},  // by default: empty object
+  securityDefinitions: {
+    Auth: {
+      type: 'apiKey',
+      in: 'header', // can be 'header', 'query' or 'cookie'
+      name: 'X-ACCESS-TOKEN', // name of the header, query parameter or cookie
+      description: 'JWT provided on login'
+    }
+  },  // by default: empty object
   definitions: {},          // by default: empty object (Swagger 2.0)
   components: {}            // by default: empty object (OpenAPI 3.x)
 };

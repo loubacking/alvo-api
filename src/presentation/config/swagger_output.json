@@ -14,7 +14,14 @@
     }
   ],
   "schemes": [],
-  "securityDefinitions": {},
+  "securityDefinitions": {
+    "Auth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-ACCESS-TOKEN",
+      "description": "JWT provided on login"
+    }
+  },
   "consumes": [],
   "produces": [],
   "paths": {
@@ -119,7 +126,7 @@
                 },
                 "name": {
                   "type": "string",
-                  "example": "Ednaldo Pereira"
+                  "example": "What is the brother"
                 },
                 "$lyrics": {
                   "type": "object",
@@ -137,7 +144,12 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
       }
     },
     "/searchSong": {
@@ -209,7 +221,12 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -242,7 +259,12 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
       }
     },
     "/artists/{id}": {

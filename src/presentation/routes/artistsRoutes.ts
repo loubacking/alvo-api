@@ -57,6 +57,9 @@ export const configArtistsRoutes = (router: Router) => {
         $imageUrl: 'image_link',
       }
     } */
+    /* #swagger.security = [{
+      "Auth": []
+    }] */
 
     controller.createArtist(req, res);
   });
@@ -72,6 +75,9 @@ export const configArtistsRoutes = (router: Router) => {
         imageUrl: 'image_link',
       }
     } */
+    /* #swagger.security = [{
+      "Auth": []
+    }] */
 
     controller.editArtist(req, res);
   });

@@ -50,6 +50,9 @@ export const configSongsRoutes = (router: Router) => {
         $chords: {}
       }
     } */
+    /* #swagger.security = [{
+      "Auth": []
+    }] */
 
     controller.createSong(req, res);
   });

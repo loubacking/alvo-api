@@ -254,7 +254,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": "true"
           }
         ],
@@ -270,7 +270,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": "true"
           }
         ],

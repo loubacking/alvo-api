@@ -3,6 +3,7 @@ import { ArtistsRepository } from "../../infra/db/repositories/artistsRepository
 import { SongsRepository } from "../../infra/db/repositories/songsRepository";
 import { ArtistsController } from "../controllers/artistsController";
 import { isAuthenticated } from "../middlewares/authMiddleware";
+import { validateArtistIdOnRequestAsync, validateCreateArtistRequestAsync, validateEditArtistRequestAsync } from "../middlewares/validators/artistsValidator";
 
 const artistsRepository = new ArtistsRepository();
 const songsRepository = new SongsRepository();
@@ -16,22 +17,19 @@ export const configArtistsRoutes = (router: Router) => {
     controller.getArtists(req, res);
   });
 
-  router.get('/artists/:id', (req, res) => {
+  router.get('/artists/:id', validateArtistIdOnRequestAsync, (req, res) => {
     // #swagger.tags = ['Artists']
     // #swagger.description = 'Get artist with id provided'
     /* #swagger.parameters['id'] = {
-      in: 'query',
       required: 'true'
     } */
-
     controller.getArtistById(req, res);
   });
 
-  router.get('/artists/:id/songs', (req, res) => {
+  router.get('/artists/:id/songs', validateArtistIdOnRequestAsync,  (req, res) => {
     // #swagger.tags = ['Artists']
     // #swagger.description = 'Get songs from the provided artist'
     /* #swagger.parameters['id'] = {
-      in: 'query',
       required: 'true'
     } */
 
@@ -49,7 +47,7 @@ export const configArtistsRoutes = (router: Router) => {
     controller.searchArtist(req, res);
   });
 
-  router.post('/artists', isAuthenticated, (req, res) => {
+  router.post('/artists', isAuthenticated, validateCreateArtistRequestAsync, (req, res) => {
     // #swagger.tags = ['Artists']
     // #swagger.description = 'Create new artist'
     /* #swagger.parameters['body'] = {
@@ -63,7 +61,7 @@ export const configArtistsRoutes = (router: Router) => {
     controller.createArtist(req, res);
   });
 
-  router.put('/artists', isAuthenticated, (req, res) => {
+  router.put('/artists', isAuthenticated, validateEditArtistRequestAsync, (req, res) => {
     // #swagger.tags = ['Artists']
     // #swagger.description = 'Edit artist data'
     /* #swagger.parameters['body'] = {

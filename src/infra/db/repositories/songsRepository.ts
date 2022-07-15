@@ -61,7 +61,7 @@ export class SongsRepository {
       let songsCollection = await MongoHelper.getCollection('song');
       
       return songsCollection
-        .find({ artistId })
+        .find({ artistId }, { projection: { name: 1, artistName: 1, artistId: 1, createdAt: 1}})
         .toArray();
     } catch (error) {
       console.error(error);

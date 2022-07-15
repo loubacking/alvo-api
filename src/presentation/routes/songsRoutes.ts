@@ -31,7 +31,6 @@ export const configSongsRoutes = (router: Router) => {
     // #swagger.tags = ['Songs']
     // #swagger.description = 'Search songs that matches keyword'
     /* #swagger.parameters['id'] = {
-      in: 'query',
       required: 'true'
     } */
 

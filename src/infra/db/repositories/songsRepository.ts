@@ -30,7 +30,7 @@ export class SongsRepository {
     let songsCollection = await MongoHelper.getCollection('song');
 
     return songsCollection
-      .find({})
+      .find({}, { projection: { name: 1, artistName: 1, artistId: 1, createdAt: 1}})
       .toArray();
   }
 

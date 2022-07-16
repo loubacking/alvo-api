@@ -48,8 +48,8 @@ export class ArtistsController {
 
   editArtist = async (req: Request, res: Response) => {
     const { id, ...params } = req.body;
-    const artistId = await this.artistsRepository.update(id, params);
+    const isSuccess = await this.artistsRepository.update(id, params);
 
-    return res.json({ id: artistId });
+    return res.json({ success: isSuccess });
   }
 }

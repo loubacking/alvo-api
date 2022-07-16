@@ -1,0 +1,321 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "",
+    "title": "Alvo Cifras API",
+    "description": ""
+  },
+  "host": "",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "",
+      "description": ""
+    }
+  ],
+  "schemes": [],
+  "securityDefinitions": {
+    "Auth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-ACCESS-TOKEN",
+      "description": "JWT provided on login"
+    }
+  },
+  "consumes": [],
+  "produces": [],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Register a new user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john@mail.com"
+                },
+                "fullName": {
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "string with more than 6 characters"
+                },
+                "passwordConfirmation": {
+                  "type": "string",
+                  "example": "string with more than 6 characters"
+                }
+              },
+              "required": [
+                "email",
+                "fullName",
+                "password",
+                "passwordConfirmation"
+              ]
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Login with provided email and password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "string with more than 6 characters"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/songs": {
+      "get": {
+        "tags": [
+          "Songs"
+        ],
+        "description": "Get a list of songs",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Songs"
+        ],
+        "description": "Create new song",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "artistId": {
+                  "type": "string",
+                  "example": "artistId"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "What is the brother"
+                },
+                "$lyrics": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "$chords": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "required": [
+                "artistId",
+                "name"
+              ]
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
+      }
+    },
+    "/searchSong": {
+      "get": {
+        "tags": [
+          "Songs"
+        ],
+        "description": "Search songs that matches keyword",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": "true"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/songs/{id}": {
+      "get": {
+        "tags": [
+          "Songs"
+        ],
+        "description": "Search songs that matches keyword",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/artists": {
+      "get": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get a list of artists",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Create new artist",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Ednaldo Pereira"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "image_link"
+                }
+              },
+              "required": [
+                "name",
+                "imageUrl"
+              ]
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Edit artist data",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "artistId"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Ednaldo Pereira"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "example": "image_link"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Auth": []
+          }
+        ]
+      }
+    },
+    "/artists/{id}": {
+      "get": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get artist with id provided",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/artists/{id}/songs": {
+      "get": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Get songs from the provided artist",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/searchArtist": {
+      "get": {
+        "tags": [
+          "Artists"
+        ],
+        "description": "Search artists that matches keyword",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": "true"
+          }
+        ],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {},
+  "components": {}
+}

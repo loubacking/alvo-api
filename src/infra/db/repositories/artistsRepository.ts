@@ -10,14 +10,14 @@ export type Artist = {
 }
 
 export class ArtistsRepository {
-  update = async (id: string, params: any): Promise<string | null> => {
+  update = async (id: string, params: any): Promise<boolean | null> => {
     try {
       const artistsCollection = await MongoHelper.getCollection('artist');
       const response = await artistsCollection.updateOne(
         { _id: Types.ObjectId(id) }, 
         { $set: {...params, editedAt: Date.now().toLocaleString() }});
       
-      return response.upsertedId.toString();
+      return response.result.ok === 1;
     } catch (e) {
       console.error(e);
       return null;

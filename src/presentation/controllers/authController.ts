@@ -49,11 +49,10 @@ export class AuthController {
     const user = {
       email, 
       fullName, 
-      encryptedPassword, 
       authToken
     };
-    const userId = await this.userRepository.createAsync(user);
+    const userId = await this.userRepository.createAsync({ ...user, encryptedPassword });
 
-    return res.status(201).json({ ...user, _id: userId });
+    return res.status(201).json({ id: userId, ...user });
   }
 }

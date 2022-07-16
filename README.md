@@ -1,6 +1,25 @@
 ## ENDPOINTS
 GET `/status` - Show API Status
 
+POST `/register` - Create account
+```
+Content-Type: application/json
+Body {
+	"email": "any@email.com",
+	"password": "password",
+	"passwordConfirmation": "password",
+	"fullName": "full name"
+}
+```
+
+POST `/login` - Create account
+```
+Content-Type: application/json
+Body {
+	"email": "any@email.com",
+	"password": "password"
+}
+```
 
 POST `/artists` - Create Artist
 ```

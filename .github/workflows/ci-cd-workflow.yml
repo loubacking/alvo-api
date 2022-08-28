@@ -37,10 +37,10 @@ jobs:
       #   run: npm test
 
       - name: Deploy application
-        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master'}}
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "peaceful-plateau-04699"
-          heroku_email: "waldemarnt@gmail.com"
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
           buildpack: "https://github.com/zidizei/heroku-buildpack-tsc#v2.0"

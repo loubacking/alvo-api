@@ -33,6 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --cache .npm
 
+      #     There are no tests yet :(
       # - name: Run all tests
       #   run: npm test
 

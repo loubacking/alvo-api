@@ -54,12 +54,6 @@ export class UserRepository {
       });
 
       return user;
-      // let usersCollection = await MongoHelper.getCollection('users');
-      
-      // const { value } = await usersCollection
-      //   .findOneAndUpdate({ _id: id }, { $set: {authToken} }, { returnDocument: 'before' });
-
-      // return value;
     } catch (error) {
       console.error(error);
       return null;

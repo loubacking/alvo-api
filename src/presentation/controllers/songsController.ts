@@ -38,7 +38,7 @@ export class SongsController {
     if(artist === null){
       return res.status(400).json({ error: `There is no artist with id '${artistId}'`});
     }
-    const songId = await this.songsRepository.create({ artistId: artist._id, artistName: artist.name, name, lyrics, chords });
+    const songId = await this.songsRepository.create({ artistId: artist.id, artistName: artist.name, name, lyrics, chords });
 
     return res.json({ id: songId });
   }

@@ -1,18 +1,23 @@
-import { Types } from "mongoose";
-import { MongoHelper } from "../mongoHelper"
+import { prisma } from "../prismaClient";
 
 export type Song = {
-  artistName: string,
-  createdAt: string,
+  artist: { id: string, name: string },
+  createdAt: Date,
   artistId: string,
   name: string,
   lyrics: string,
   chords: string
 }
 
+export type SongBasics = {
+  id: string,
+  artist: { id: string, name: string },
+  createdAt: Date,
+  name: string,
+}
+
 export type CreateSongRequest = {
   artistId: string, 
-  artistName: string, 
   name: string, 
   lyrics: string, 
   chords: string
@@ -20,49 +25,81 @@ export type CreateSongRequest = {
 
 export class SongsRepository {
   create = async (req: CreateSongRequest): Promise<string> => {
-    let songsCollection = await MongoHelper.getCollection('song');
-    var response = await songsCollection.insertOne({ ...req, createdAt: Date.now().toLocaleString() });
+    const { id } = await prisma.song.create({
+      data: {
+        ...req
+      }
+    })
 
-    return response.insertedId;
+    return id;
   }
 
-  getAll = async (): Promise<Song[]> => {
-    let songsCollection = await MongoHelper.getCollection('song');
+  getAll = async (): Promise<SongBasics[]> => {
+    const songs = await prisma.song.findMany({
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        artist: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      }
+    });
 
-    return songsCollection
-      .find({}, { projection: { name: 1, artistName: 1, artistId: 1, createdAt: 1}})
-      .toArray();
+    return songs;
   }
 
   getById = async (id: string): Promise<Song[] | {}> => {
     try {
-      let songsCollection = await MongoHelper.getCollection('song');
-      
-      return songsCollection
-        .findOne({ _id: new Types.ObjectId(id) });
-      
+      const song = await prisma.song.findFirst({
+        where: {
+          id
+        }
+      });
+
+      return song;
     } catch (error) {
       console.error(error);
       return {};
     }
   }
 
-  search = async (name: RegExp): Promise<Song[]> => {
-    let songsCollection = await MongoHelper.getCollection('song');
+  search = async (name: string): Promise<SongBasics[]> => {
+    const songs = await prisma.song.findMany({
+      where: {
+        name: {
+          contains: name
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        artist: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      }
+    });
 
-    return songsCollection
-      .find({ name }, { projection: { name: 1, artistName: 1, artistId: 1, createdAt: 1}})
-      .toArray();
+    return songs;
   }
 
   
   getByArtistId = async (artistId: string): Promise<Song[] | {}> => {
     try {
-      let songsCollection = await MongoHelper.getCollection('song');
-      
-      return songsCollection
-        .find({ artistId }, { projection: { name: 1, artistName: 1, artistId: 1, createdAt: 1}})
-        .toArray();
+      const song = await prisma.song.findFirst({
+        where: {
+          artistId
+        }
+      });
+
+      return song;
     } catch (error) {
       console.error(error);
       return [];

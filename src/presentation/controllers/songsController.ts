@@ -26,19 +26,19 @@ export class SongsController {
 
   searchSong = async (req: Request, res: Response) => {
     const { keyword } = req.query;
-    const name = new RegExp(keyword as string, "i");
 
-    const songs = await this.songsRepository.search(name);
+    const songs = await this.songsRepository.search(keyword as string);
     return res.json(songs);
   };
 
   createSong = async (req: Request, res: Response) => {
     const { artistId, name, lyrics, chords } = req.body;
     const artist = await this.artistsRepository.getById(artistId);
+    console.log(artist);
     if(artist === null){
       return res.status(400).json({ error: `There is no artist with id '${artistId}'`});
     }
-    const songId = await this.songsRepository.create({ artistId: artist.id, artistName: artist.name, name, lyrics, chords });
+    const songId = await this.songsRepository.create({ artistId: artist.id, name, lyrics, chords });
 
     return res.json({ id: songId });
   }

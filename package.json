@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "engines": {
-    "node": "14.15.2"
+    "node": "14.21.3"
   },
   "dependencies": {
     "@prisma/client": "^4.5.0",
@@ -17,7 +17,6 @@
     "jsonwebtoken": "^8.5.1",
     "simple-node-logger": "^0.93.40",
     "swagger-ui-express": "^4.4.0",
-    "tsc": "^2.0.4",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -33,14 +32,14 @@
     "nodemon": "^2.0.19",
     "prisma": "^4.5.0",
     "swagger-autogen": "^2.3.3",
+    "tsup": "^6.6.3",
+    "tsx": "^3.12.3",
     "typescript": "^4.6.2"
   },
   "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsup src",
     "start": "node dist/server.js",
-    "tsc": "tsc",
-    "postinstall": "npm run tsc",
-    "watch-node": "nodemon src/server.ts",
-    "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m Heroku && git push heroku master",
     "update-swagger": "node src/presentation/routes/swagger.ts"
   },

@@ -1,23 +1,25 @@
-import { response } from "express";
-import { Types } from "mongoose";
-import { MongoHelper } from "../mongoHelper"
+import { prisma } from "../prismaClient";
 
 export type Artist = {
-  _id: string,
-  createdAt: string,
+  id: string,
   name: string,
-  image: string
+  imageUrl: string
+  createdAt: Date,
 }
 
 export class ArtistsRepository {
   update = async (id: string, params: any): Promise<boolean | null> => {
     try {
-      const artistsCollection = await MongoHelper.getCollection('artist');
-      const response = await artistsCollection.updateOne(
-        { _id: Types.ObjectId(id) }, 
-        { $set: {...params, editedAt: Date.now().toLocaleString() }});
-      
-      return response.result.ok === 1;
+      const artist = await prisma.artist.update({
+        where: {
+          id
+        },
+        data: {
+          ...params
+        }
+      })
+
+      return artist !== null;
     } catch (e) {
       console.error(e);
       return null;
@@ -25,26 +27,31 @@ export class ArtistsRepository {
   }
 
   create = async (name: string, imageUrl: string): Promise<string> => {
-    const artistsCollection = await MongoHelper.getCollection('artist');
-    const artist = await artistsCollection.insertOne({ name, imageUrl, createdAt: Date.now().toLocaleString()});
+    const { id } = await prisma.artist.create({
+      data: {
+        name,
+        imageUrl,
+      }
+    });
 
-    return artist.insertedId;
+    return id;
   }
 
   getAll = async (): Promise<Artist[]> => {
-    let artistsCollection = await MongoHelper.getCollection('artist');
+    const allArtists = await prisma.artist.findMany();
 
-    return artistsCollection
-      .find({})
-      .toArray();
+    return allArtists;
   }
 
   getById = async (id: string): Promise<Artist | null> => {
     try {
-      let artistsCollection = await MongoHelper.getCollection('artist');
-      
-      return artistsCollection
-        .findOne({ _id: new Types.ObjectId(id) });
+      const artist = await prisma.artist.findFirst({
+        where: {
+          id
+        }
+      });
+
+      return artist;
       
     } catch (error) {
       console.error(error);
@@ -52,11 +59,15 @@ export class ArtistsRepository {
     }
   }
 
-  search = async (name: RegExp): Promise<Artist[]> => {
-    let artistsCollection = await MongoHelper.getCollection('artist');
+  search = async (name: string): Promise<Artist[]> => {
+    const artists = await prisma.artist.findMany({
+      where: {
+        name: {
+          contains: name
+        }
+      }
+    });
 
-    return artistsCollection
-      .find({ name })
-      .toArray();
+    return artists;
   }
 }

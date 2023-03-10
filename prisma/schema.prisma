@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id                 String @id @default(uuid())
+  fullName           String
+  email              String @unique
+  encryptedPassword  String?
+  authToken          String?
+  googleId           String?
+  playlists          Playlist[]
+  createdAt          DateTime @default(now())
+  updateAt           DateTime @updatedAt
+}
+
+model Artist {
+  id          String @id @default(uuid())
+  imageUrl    String 
+  name        String
+  songs       Song[] @relation("ArtistSongs")
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+}
+
+model Song {
+  id          String @id @default(uuid())
+  name        String
+  chords      Json
+  lyrics      Json
+  artist      Artist @relation(name: "ArtistSongs", fields: [artistId], references: [id]) 
+  artistId    String @unique
+  playlists   SongsOnPlaylist[]
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  @@index([artistId])
+}
+ 
+model Playlist {
+  id          String @id @default(uuid())
+  name        String
+  songs       SongsOnPlaylist[]
+  owner       User @relation(fields: [ownerId], references: [id])
+  ownerId     String  @unique
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  @@index([ownerId])
+}
+
+model SongsOnPlaylist {
+  id          String @id @default(uuid())
+  playlist    Playlist @relation(fields: [playlistId], references: [id])
+  playlistId  String
+  song        Song @relation(fields: [songId], references: [id])
+  songId      String
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  @@index([playlistId])
+  @@index([songId])
+}

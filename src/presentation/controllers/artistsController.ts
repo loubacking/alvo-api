@@ -26,9 +26,8 @@ export class ArtistsController {
   
   searchArtist = async (req: Request, res: Response) => {
     const { keyword } = req.query;
-    const name = new RegExp(keyword as string, "i");
 
-    const artist = await this.artistsRepository.search(name);
+    const artist = await this.artistsRepository.search(keyword as string);
     return res.json(artist);
   }
 

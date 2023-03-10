@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { MongoHelper } from "../../infra/db/mongoHelper";
+import { prisma } from "../../infra/db/prismaClient";
 
 export const isAuthenticated = async(req: Request, res: Response, next: NextFunction) => {
   if(req.headers['temporary-access'] === 'alvo2020')
@@ -14,12 +14,13 @@ export const isAuthenticated = async(req: Request, res: Response, next: NextFunc
 
 const isUserAuthenticated = async (authToken: string): Promise<boolean> => {
   try {
-    const users = await MongoHelper.getCollection('users');
-    
-    const response = await users
-      .findOne({ authToken });
-    
-    return response !== null
+    const user = await prisma.user.findFirst({
+      where: {
+        authToken
+      }
+    })
+
+    return user !== null;
   } catch (error) {
     console.error('User is not authenticated', error);
     return false;

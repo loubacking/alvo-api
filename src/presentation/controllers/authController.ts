@@ -27,7 +27,7 @@ export class AuthController {
     } 
 
     const authToken = this.tokenHelper.create(user.fullName, user.email)
-    await this.userRepository.updateTokenAsync({id: user._id, authToken});
+    await this.userRepository.updateTokenAsync({id: user.id, authToken});
     return res.status(200).send({ authToken });
   }
 

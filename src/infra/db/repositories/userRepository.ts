@@ -1,20 +1,23 @@
-import { MongoHelper } from "../mongoHelper";
+import { prisma } from "../prismaClient";
 
 export type User = {
-  _id?: string,
+  id: string,
   fullName: string,
-  username: string,
+  email: string
+  googleId?: string,
   encryptedPassword: string,
-  email: string | null
 }
 
 export class UserRepository {
   getByEmailAsync = async (email: string): Promise<User | null> => {
     try {
-      let usersCollection = await MongoHelper.getCollection('users');
-      
-      return usersCollection
-      .findOne({ email });
+      const user = await prisma.user.findUnique({
+        where: {
+          email
+        }
+      });
+
+      return user;
     } catch (error) {
       console.error(error);
       return null;
@@ -23,12 +26,16 @@ export class UserRepository {
   
   createAsync = async ({ email, encryptedPassword, fullName, authToken }): Promise<string | null> => {
     try {
-      let usersCollection = await MongoHelper.getCollection('users');
-      
-      const user = await usersCollection
-        .insertOne({ email, encryptedPassword, fullName, authToken });
+      const { id } = await prisma.user.create({
+        data: {
+          email,
+          encryptedPassword,
+          fullName,
+          authToken
+        }
+      });
 
-      return user.insertedId
+      return id;
     } catch (error) {
       console.error(error);
       return null;
@@ -37,12 +44,16 @@ export class UserRepository {
 
   updateTokenAsync = async ({ id, authToken }): Promise<User | null> => {
     try {
-      let usersCollection = await MongoHelper.getCollection('users');
-      
-      const { value } = await usersCollection
-        .findOneAndUpdate({ _id: id }, { $set: {authToken} }, { returnDocument: 'before' });
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          authToken
+        }
+      });
 
-      return value;
+      return user;
     } catch (error) {
       console.error(error);
       return null;

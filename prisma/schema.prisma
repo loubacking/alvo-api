@@ -11,11 +11,11 @@ datasource db {
 
 model User {
   id                 String @id @default(uuid())
-  fullName           String
-  email              String @unique
-  encryptedPassword  String?
-  authToken          String?
-  googleId           String?
+  fullName           String @db.VarChar(200)
+  email              String @unique @db.VarChar(200)
+  encryptedPassword  String? @db.VarChar(1000)
+  authToken          String? @db.VarChar(1000)
+  googleId           String? @db.VarChar(1000)
   playlists          Playlist[]
   createdAt          DateTime @default(now())
   updateAt           DateTime @updatedAt
@@ -23,8 +23,8 @@ model User {
 
 model Artist {
   id          String @id @default(uuid())
-  imageUrl    String 
-  name        String
+  imageUrl    String @db.VarChar(1000)
+  name        String @db.VarChar(200)
   songs       Song[] @relation("ArtistSongs")
   createdAt   DateTime @default(now())
   updateAt    DateTime @updatedAt
@@ -32,7 +32,7 @@ model Artist {
 
 model Song {
   id          String @id @default(uuid())
-  name        String
+  name        String @db.VarChar(200)
   chords      Json
   lyrics      Json
   artist      Artist @relation(name: "ArtistSongs", fields: [artistId], references: [id]) 
@@ -46,7 +46,7 @@ model Song {
  
 model Playlist {
   id          String @id @default(uuid())
-  name        String
+  name        String @db.VarChar(200)
   songs       SongsOnPlaylist[]
   owner       User @relation(fields: [ownerId], references: [id])
   ownerId     String  @unique

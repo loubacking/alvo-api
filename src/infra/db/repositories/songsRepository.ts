@@ -1,12 +1,13 @@
 import { prisma } from "../prismaClient";
 
 export type Song = {
+  id: string,
   artist: { id: string, name: string },
   createdAt: Date,
   artistId: string,
   name: string,
-  lyrics: string,
-  chords: string
+  lyrics: string | any,
+  chords: string | any,
 }
 
 export type SongBasics = {
@@ -91,15 +92,31 @@ export class SongsRepository {
   }
 
   
-  getByArtistId = async (artistId: string): Promise<Song[] | {}> => {
+  getByArtistId = async (artistId: string): Promise<Song[]> => {
     try {
-      const song = await prisma.song.findFirst({
+      const songs = await prisma.song.findMany({
         where: {
           artistId
+        },
+        select: {
+          id: true,
+          name: true,
+          lyrics: true,
+          chords: true,
+          artistId: true,
+          playlists: false,
+          createdAt: true,
+          updateAt: true,
+          artist: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         }
       });
 
-      return song;
+      return songs;
     } catch (error) {
       console.error(error);
       return [];
